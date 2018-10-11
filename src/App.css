@@ -1,32 +1,33 @@
-.App {
-  text-align: center;
+.pcard {
+  margin: 10px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.projectCard {
+  background: url("https://s3.amazonaws.com/lyrics-translation-tool/assets/img/md-img1.jpg")
+    center / cover;
+  height: 300px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.project-title {
   color: white;
+  text-shadow: 1px 1px 1px black;
 }
 
-.App-link {
-  color: #61dafb;
+.editing-header-one {
+  background-color: #00b8d4;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.editing-header-two {
+  background-color: white;
+}
+
+.editing-header-two-title {
+  color: black;
+}
+.normal-text {
+  width: 100%;
+}
+
+.selector {
+  width: 200px;
 }
