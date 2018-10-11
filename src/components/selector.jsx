@@ -21,8 +21,11 @@ export default class Selector extends Component {
 
   createMenu() {
     return this.props.selections.map(selection => {
-      console.log(selection);
-      return <MenuItem value={selection.mode}>{selection.text}</MenuItem>;
+      return (
+        <MenuItem key={selection.mode} value={selection.mode}>
+          {selection.text}
+        </MenuItem>
+      );
     });
   }
 

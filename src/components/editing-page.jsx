@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import NormalText from "./nomal-text";
+import NormalText from "./normal-text";
 import $ from "jquery";
 import Selector from "./selector";
 import Navbar from "./navbar";
@@ -10,7 +10,8 @@ class EditingPage extends Component {
     super();
     this.state = {
       songInfo: {},
-      lines: []
+      lines: [],
+      autoSuggest: []
     };
   }
 
@@ -29,18 +30,23 @@ class EditingPage extends Component {
         state.title
       }/${state.artist}`
     ).done(data => {
-      console.log(data["lines"][0]);
-      this.setState({ lines: data["lines"] });
+      this.setState({
+        lines: data["lines"]
+      });
     });
   }
 
   createNormalText() {
+    let autoSuggest = this.state.lines.map(line => {
+      return line["line-translation"];
+    });
     return this.state.lines.map((line, index) => {
       return (
         <NormalText
           key={index}
           line_content={line["line-content"]}
           line_translation={line["line-translation"]}
+          autoSuggestions={autoSuggest}
         />
       );
     });
