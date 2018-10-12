@@ -37,16 +37,24 @@ class EditingPage extends Component {
   }
 
   createNormalText() {
-    let autoSuggest = this.state.lines.map(line => {
-      return line["line-translation"];
-    });
+    let autoSuggest = () => {
+      let returnlst = [];
+      for (let line of this.state.lines) {
+        if (line["line-translation"] !== "") {
+          returnlst.push({
+            content: line["line-translation"]
+          });
+        }
+      }
+      return returnlst;
+    };
     return this.state.lines.map((line, index) => {
       return (
         <NormalText
           key={index}
           line_content={line["line-content"]}
           line_translation={line["line-translation"]}
-          autoSuggestions={autoSuggest}
+          autoSuggestions={autoSuggest()}
         />
       );
     });

@@ -12,6 +12,7 @@ export default class NormalText extends Component {
       value: "",
       suggestions: []
     };
+    this.getSuggestionValue = suggestion => suggestion.name;
   }
   componentDidMount() {
     this.setState({
@@ -40,12 +41,12 @@ export default class NormalText extends Component {
   getSuggestions(value) {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
-    console.log(this.props.autoSuggestions);
     return inputLength === 0
       ? []
       : this.props.autoSuggestions.filter(
           suggestion =>
-            suggestion.toLowerCase().slice(0, inputLength) === inputValue
+            suggestion.content.toLowerCase().slice(0, inputLength) ===
+            inputValue
         );
   }
 
@@ -57,12 +58,12 @@ export default class NormalText extends Component {
           suggestions={suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={this.getSuggestions}
-          renderSuggestion={suggestions => (
-            <MenuItem>{suggestions.name}</MenuItem>
-          )}
+          getSuggestionValue={suggestion => suggestion.content}
+          renderSuggestion={suggestions => {
+            return <MenuItem>{suggestions.content}</MenuItem>;
+          }}
           inputProps={{
-            value: this.state.value,
+            value: value,
             onChange: this.onChange,
             label: this.props.line_content
           }}
