@@ -1,9 +1,12 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import NormalText from "./normal-text";
 import $ from "jquery";
-import Selector from "./selector";
+import Fade from "@material-ui/core/Fade";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Navbar from "./navbar";
+import NormalText from "./normal-text";
+import { withRouter } from "react-router-dom";
+import React, { Component } from "react";
+import Selector from "./selector";
+import settings from "./settings/settings";
 
 class EditingPage extends Component {
   constructor() {
@@ -11,7 +14,8 @@ class EditingPage extends Component {
     this.state = {
       songInfo: {},
       lines: [],
-      autoSuggest: []
+      autoSuggest: [],
+      isloaded: false
     };
   }
 
@@ -26,39 +30,62 @@ class EditingPage extends Component {
 
     let userID = state.userID;
     $.getJSON(
-      `https://api.mytranshelper.com/api/load-project/${userID}/${
-        state.title
-      }/${state.artist}`
+      `${settings.baseURL}/${userID}/${state.title}/${state.artist}`
     ).done(data => {
       this.setState({
-        lines: data["lines"]
+        lines: data["lines"],
+        isloaded: true
       });
     });
   }
 
-  createNormalText() {
-    let autoSuggest = () => {
-      let returnlst = [];
-      for (let line of this.state.lines) {
-        if (line["line-translation"] !== "") {
-          returnlst.push({
-            content: line["line-translation"]
-          });
-        }
+  autoSuggestions() {
+    let returnlst = [];
+    let i = 0;
+    for (let line of this.state.lines) {
+      if (line["line-translation"] !== "") {
+        returnlst.push({
+          index: i,
+          content: line["line-translation"]
+        });
+        i += 1;
       }
-      return returnlst;
-    };
+    }
+    return returnlst;
+  }
+
+  createNormalText() {
+    let suggestions = this.autoSuggestions();
+    console.log("A");
     return this.state.lines.map((line, index) => {
       return (
         <NormalText
           key={index}
           line_content={line["line-content"]}
           line_translation={line["line-translation"]}
-          autoSuggestions={autoSuggest()}
+          autoSuggestions={suggestions}
+          index={index}
+          update={this.updateHandler.bind(this)}
         />
       );
     });
   }
+
+  updateHandler(data) {
+    let oldSuggestion = this.state.autoSuggest;
+    for (let i = 0; i < oldSuggestion.length; i++) {
+      if (oldSuggestion[i].index === data.index) {
+        oldSuggestion[i].content = data.content;
+      } else {
+        oldSuggestion.push(data);
+      }
+    }
+    console.log(this.state.autoSuggest);
+    // this.setState({
+    //   autoSuggest: oldSuggestion
+    // });
+  }
+
   render() {
     return (
       <div>
@@ -66,8 +93,12 @@ class EditingPage extends Component {
           icon="arrowBack"
           title={this.state.songInfo.title}
           color="secondary"
+          link="/"
         />
         <Navbar title={this.state.songInfo.artist} color="default" />
+        <Fade in={!this.state.isloaded} timeout={1000}>
+          <LinearProgress color="secondary" />
+        </Fade>
         <Selector
           className="selector"
           selections={[

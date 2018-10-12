@@ -10,14 +10,20 @@ export default class NormalText extends Component {
     super();
     this.state = {
       value: "",
-      suggestions: []
+      suggestions: [],
+      autoSuggestions: []
     };
     this.getSuggestionValue = suggestion => suggestion.name;
   }
   componentDidMount() {
     this.setState({
-      value: this.props.line_translation
+      value: this.props.line_translation,
+      autoSuggestions: this.props.autoSuggestions
     });
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log(newProps);
   }
 
   onChange = (event, { newValue }) => {
@@ -25,6 +31,13 @@ export default class NormalText extends Component {
       value: newValue
     });
   };
+
+  onUnfoucus(e) {
+    this.props.update({
+      index: this.props.index,
+      content: e.target.value
+    });
+  }
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
@@ -43,7 +56,7 @@ export default class NormalText extends Component {
     const inputLength = inputValue.length;
     return inputLength === 0
       ? []
-      : this.props.autoSuggestions.filter(
+      : this.state.autoSuggestions.filter(
           suggestion =>
             suggestion.content.toLowerCase().slice(0, inputLength) ===
             inputValue
@@ -60,7 +73,11 @@ export default class NormalText extends Component {
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={suggestion => suggestion.content}
           renderSuggestion={suggestions => {
-            return <MenuItem>{suggestions.content}</MenuItem>;
+            return (
+              <MenuItem component="div">
+                <div>{suggestions.content}</div>
+              </MenuItem>
+            );
           }}
           inputProps={{
             value: value,
@@ -72,14 +89,17 @@ export default class NormalText extends Component {
               {options.children}
             </Paper>
           )}
-          renderInputComponent={props => (
-            <TextField
-              {...props}
-              margin="normal"
-              variant="outlined"
-              fullWidth
-            />
-          )}
+          renderInputComponent={props => {
+            return (
+              <TextField
+                {...props}
+                margin="normal"
+                variant="outlined"
+                onBlur={this.onUnfoucus.bind(this)}
+                fullWidth
+              />
+            );
+          }}
         />
       </div>
     );

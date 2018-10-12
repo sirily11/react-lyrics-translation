@@ -1,14 +1,18 @@
 import React, { Component } from "react";
-import Startcard from "./Startcard";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Fade from "@material-ui/core/Fade";
+import Grow from "@material-ui/core/Grow";
 import $ from "jquery";
 import ProjectCard from "./projectcard";
 import Navbar from "./navbar";
+import Startcard from "./Startcard";
 
 export default class Home extends Component {
   constructor() {
     super();
     this.state = {
-      projects: []
+      projects: [],
+      isloaded: false
     };
   }
 
@@ -18,7 +22,7 @@ export default class Home extends Component {
         this.props.userID
       }`
     ).done(data => {
-      this.setState({ projects: data });
+      this.setState({ projects: data, isloaded: true });
       $("#musiclist-loadingbar").fadeOut(200);
     });
   }
@@ -46,16 +50,16 @@ export default class Home extends Component {
           <div>
             <div>
               <i className="material-icons mdl-chip__contact">list</i>
-            </div>
-            <span className="mdl-chip__text lang" id="projectTag">
               {this.props.languageTranslation.projectTag}
-            </span>
-            <div
-              className="mdl-spinner mdl-js-spinner is-active"
-              id="musiclist-loadingbar"
-            />
+            </div>
+
+            <Fade in={!this.state.isloaded} timeout={{ enter: 0, exit: 2000 }}>
+              <CircularProgress size={30} />
+            </Fade>
           </div>
-          <div className="row">{this.createProjectCard()}</div>
+          <Grow in={this.state.isloaded}>
+            <div className="row">{this.createProjectCard()}</div>
+          </Grow>
         </div>
       </div>
     );

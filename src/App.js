@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import EditingPage from "./components/editing-page";
 import Home from "./components/homePage";
-import languageTranslation from "./components/language";
+import languageTranslation from "./components/settings/language";
 import React, { Component } from "react";
 import "material-design-lite/material.min.css";
 import "material-design-lite/material.min.js";
