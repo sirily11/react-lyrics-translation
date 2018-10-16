@@ -44,18 +44,28 @@ export default class Home extends Component {
   render() {
     return (
       <div>
-        <Navbar icon="menu" title={this.props.languageTranslation.title} />
-        <div className="page-content">
+        <Navbar
+          icon="menu"
+          title={this.props.languageTranslation.title}
+          languageTranslation={this.props.languageTranslation}
+          userName={this.props.userName}
+          loginStatus={this.props.loginStatus}
+          login={this.props.login}
+          logout={this.props.logout.bind(this)}
+        />
+        <div className="container-fluid">
           <Startcard languageTranslation={this.props.languageTranslation} />
           <div>
             <div>
               <i className="material-icons mdl-chip__contact">list</i>
               {this.props.languageTranslation.projectTag}
+              <Fade
+                in={!this.state.isloaded}
+                timeout={{ enter: 0, exit: 2000 }}
+              >
+                <CircularProgress size={30} />
+              </Fade>
             </div>
-
-            <Fade in={!this.state.isloaded} timeout={{ enter: 0, exit: 2000 }}>
-              <CircularProgress size={30} />
-            </Fade>
           </div>
           <Grow in={this.state.isloaded}>
             <div className="row">{this.createProjectCard()}</div>

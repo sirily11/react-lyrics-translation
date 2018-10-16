@@ -9,12 +9,17 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
 import blue from "@material-ui/core/colors/blue";
+import DrawerList from "./drawerList";
+import DialogAuth from "./dialog";
 
 export default class Navbar extends Component {
   constructor() {
     super();
     this.state = {
-      drawerOpen: false
+      drawerOpen: false,
+      dialogOpen: false,
+      dialogTitle: "",
+      dialogButtonTitle: ""
     };
   }
 
@@ -22,6 +27,22 @@ export default class Navbar extends Component {
     let prevState = this.state.drawerOpen;
     this.setState({
       drawerOpen: !prevState
+    });
+  }
+
+  handleDialog(title, buttonTitle) {
+    console.log("Open");
+    this.setState({
+      drawerOpen: false,
+      dialogOpen: true,
+      dialogTitle: title,
+      dialogButtonTitle: buttonTitle
+    });
+  }
+
+  handleCloseDialog() {
+    this.setState({
+      dialogOpen: false
     });
   }
 
@@ -58,9 +79,23 @@ export default class Navbar extends Component {
         <Drawer
           open={this.state.drawerOpen}
           onClose={this.toggleDrawer.bind(this)}
+          width="100%"
         >
-          <div>{"Some list"}</div>
+          <DrawerList
+            userName={this.props.userName}
+            languageTranslation={this.props.languageTranslation}
+            dialog={this.handleDialog.bind(this)}
+            loginStatus={this.props.loginStatus}
+            logout={this.props.logout}
+          />
         </Drawer>
+        <DialogAuth
+          openDialog={this.state.dialogOpen}
+          closeDialog={this.handleCloseDialog.bind(this)}
+          title={this.state.dialogTitle}
+          buttonTitle={this.state.dialogButtonTitle}
+          login={this.props.login}
+        />
       </div>
     );
   }

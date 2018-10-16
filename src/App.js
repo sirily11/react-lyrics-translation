@@ -14,12 +14,29 @@ class App extends Component {
     this.state = {
       title: "",
       translation: languageTranslation[languageCode],
-      userID: "e225f036-bef7-11e8-a97b-b0c090c3b9ec"
+      userID: "e225f036-bef7-11e8-a97b-b0c090c3b9ec",
+      userName: "",
+      loginStatus: false
     };
   }
 
   titleChangeHandler(title) {
     console.log(title);
+  }
+
+  handleLogout() {
+    this.setState({
+      loginStatus: false,
+      userName: ""
+    });
+  }
+
+  handleLogin(userID, userName) {
+    console.log(userID);
+    this.setState({
+      loginStatus: true,
+      userName: userName
+    });
   }
 
   render() {
@@ -35,6 +52,10 @@ class App extends Component {
                   {...props}
                   languageTranslation={this.state.translation}
                   userID={this.state.userID}
+                  userName={this.state.userName}
+                  loginStatus={this.state.loginStatus}
+                  login={this.handleLogin.bind(this)}
+                  logout={this.handleLogout.bind(this)}
                 />
               )}
             />
