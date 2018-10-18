@@ -11,13 +11,27 @@ class App extends Component {
   constructor() {
     super();
     let languageCode = navigator.language.substr(0, 2);
+    //e225f036-bef7-11e8-a97b-b0c090c3b9ec
+    //sirily11
     this.state = {
       title: "",
       translation: languageTranslation[languageCode],
-      userID: "e225f036-bef7-11e8-a97b-b0c090c3b9ec",
-      userName: "sirily11",
+      userID: "",
+      userName: "",
       loginStatus: false
     };
+  }
+
+  componentWillMount() {
+    let response = sessionStorage.getItem("userData");
+    if (response !== null) {
+      let userData = JSON.parse(response);
+      this.setState({
+        userID: userData.userID,
+        userName: userData.userName,
+        loginStatus: true
+      });
+    }
   }
 
   titleChangeHandler(title) {
@@ -27,16 +41,24 @@ class App extends Component {
   handleLogout() {
     this.setState({
       loginStatus: false,
-      userName: ""
+      userName: "",
+      userID: ""
     });
+    sessionStorage.removeItem("userData");
   }
 
   handleLogin(userID, userName) {
     console.log(userID);
     this.setState({
       loginStatus: true,
+      userID: userID,
       userName: userName
     });
+    let userData = {
+      userID: userID,
+      userName: userName
+    };
+    sessionStorage.setItem("userData", JSON.stringify(userData));
   }
 
   render() {

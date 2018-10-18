@@ -46,14 +46,15 @@ let languageTranslation = {
     usingApplemusic: "Play music from Apple Music",
     uploadthetimedlyrics: "Timed lyrics data has been uploaded",
     currentInfo:
-      "Problem: Won't be able to highlight the word which has short period."
+      "Problem: Won't be able to highlight the word which has short period.",
+    not_login: "Not login"
   },
 
   zh: {
     start_project_btn: "开始项目",
     artistText: "歌手",
     songText: "歌名",
-    lyricsText : "歌词",
+    lyricsText: "歌词",
     welcomeText:
       "欢迎来到歌词翻译网站，请先登录，之后轻点下方的开始项目按钮，便可以轻松创建属于你的歌词翻译项目。",
     welcomeTextHeader: "开始使用",
@@ -97,7 +98,8 @@ let languageTranslation = {
     usingApplemusic: "播放苹果音乐歌曲",
     uploadthetimedlyrics: "同步歌词数据已经上传，请刷新页面",
     currentInfo: "问题：在歌词显示的时候会出现间隔过短导致无法高亮单词的问题。",
-    sentencesmobile: "以手机样式编辑"
+    sentencesmobile: "以手机样式编辑",
+    not_login: "尚未登陆"
   }
 };
 export default languageTranslation;

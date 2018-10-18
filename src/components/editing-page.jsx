@@ -16,7 +16,8 @@ class EditingPage extends Component {
       songInfo: {},
       autoSuggest: [],
       translated: [],
-      isloaded: false
+      isloaded: false,
+      mode: "normal_text"
     };
   }
 
@@ -89,7 +90,7 @@ class EditingPage extends Component {
     } else {
       translated.push({ index: translated.length, content: value });
     }
-    lines[index] = value;
+    lines[index]["line-translation"] = value;
     // console.log(translated);
     this.setState({
       translated: translated,
@@ -97,8 +98,14 @@ class EditingPage extends Component {
     });
   }
 
-  changeHandler(value) {
-  
+  changeHandler(value) {}
+
+  createText() {
+    switch (this.state.mode) {
+      case "normal_text":
+        return this.createNormalText();
+        break;
+    }
   }
 
   render() {
@@ -129,7 +136,7 @@ class EditingPage extends Component {
             ]}
             title={this.props.languageTranslation.type_selector}
           />
-          {this.createNormalText()}
+          {this.createText()}
         </div>
       </div>
     );

@@ -7,6 +7,10 @@ import ProjectCard from "./projectcard";
 import Navbar from "./navbar";
 import Startcard from "./Startcard";
 import NewProject from "./newProject";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Button from "@material-ui/core/Button";
 
 export default class Home extends Component {
   constructor() {
@@ -14,19 +18,53 @@ export default class Home extends Component {
     this.state = {
       projects: [],
       isloaded: false,
-      openCreateDialog: false
+      openCreateDialog: false,
+      warning: ""
     };
   }
 
   componentWillMount() {
+    if (this.props.loginStatus) {
+      this.getProject(this.props.userID);
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.props.loginStatus != newProps.loginStatus) {
+      if (this.props.loginStatus === false) {
+        this.getProject(newProps.userID);
+      } else {
+        this.setState({
+          projects: []
+        });
+        sessionStorage.removeItem("projectsData");
+      }
+    }
+  }
+
+  getProject(userID) {
     $.getJSON(
-      `https://api.mytranshelper.com/api/get_all_projects_list/${
-        this.props.userID
-      }`
-    ).done(data => {
-      this.setState({ projects: data, isloaded: true });
-      $("#musiclist-loadingbar").fadeOut(200);
-    });
+      `https://api.mytranshelper.com/api/get_all_projects_list/${userID}`
+    )
+      .done(data => {
+        this.setState({ projects: data, isloaded: true });
+        sessionStorage.setItem(
+          "projectsData",
+          JSON.stringify({
+            projects: data
+          })
+        );
+        $("#musiclist-loadingbar").fadeOut(200);
+      })
+      .fail(() => {
+        let response = sessionStorage.getItem("projectsData");
+        if (response !== null) {
+          let projects = JSON.parse(response);
+          this.setState({
+            projects: projects
+          });
+        }
+      });
   }
 
   removeHandler(artist, title) {
@@ -54,8 +92,20 @@ export default class Home extends Component {
   }
 
   openCreateDialog() {
+    if (this.props.loginStatus !== true) {
+      this.setState({
+        warning: this.props.languageTranslation.not_login
+      });
+    } else {
+      this.setState({
+        openCreateDialog: true
+      });
+    }
+  }
+
+  handleWarningClose() {
     this.setState({
-      openCreateDialog: true
+      warning: ""
     });
   }
 
@@ -114,13 +164,36 @@ export default class Home extends Component {
                 in={!this.state.isloaded}
                 timeout={{ enter: 0, exit: 2000 }}
               >
-                <CircularProgress size={30} />
+                <CircularProgress hidden={!this.props.loginStatus} size={30} />
               </Fade>
             </div>
           </div>
           <Grow in={this.state.isloaded}>
             <div className="row">{this.createProjectCard()}</div>
           </Grow>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left"
+            }}
+            open={this.state.warning !== ""}
+            autoHideDuration={6000}
+            ContentProps={{
+              "aria-describedby": "message-id"
+            }}
+            message={<span id="message-id">{this.state.warning}</span>}
+            onClose={this.handleWarningClose.bind(this)}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={this.handleWarningClose.bind(this)}
+              >
+                <CloseIcon />
+              </IconButton>
+            ]}
+          />
         </div>
       </div>
     );
