@@ -6,7 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Slide from "@material-ui/core/Slide";
 import Collapse from "@material-ui/core/Collapse";
-import { testURL } from "./settings/settings";
+import settings from "./settings/settings";
 import $ from "jquery";
 
 export default class DialogAuth extends Component {
@@ -30,12 +30,12 @@ export default class DialogAuth extends Component {
         errorMessage: "Please enter the password or username"
       });
     } else {
-      let url = "http://127.0.0.1:8000/";
+      let url = "";
       if (this.props.title.includes("Sign")) {
-        url += "post/sign_up";
+        url = settings.getURL("post/sign_up");
         console.log("contains sign_up");
       } else {
-        url += "post/login";
+        url = settings.getURL("post/login");
       }
       $.ajax({
         type: "POST",
@@ -75,6 +75,10 @@ export default class DialogAuth extends Component {
     this.setState({ userName: e.target.value });
   }
 
+  transition(props) {
+    return <Slide direction="up" {...props} />;
+  }
+
   render() {
     return (
       <div>
@@ -92,7 +96,6 @@ export default class DialogAuth extends Component {
                     <p style={{ color: "red" }}>{this.state.errorMessage}</p>
                   </Collapse>
                   <TextField
-                    autoFocus
                     margin="dense"
                     id="username"
                     label="User name"

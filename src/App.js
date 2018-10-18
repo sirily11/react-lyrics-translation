@@ -15,7 +15,7 @@ class App extends Component {
       title: "",
       translation: languageTranslation[languageCode],
       userID: "e225f036-bef7-11e8-a97b-b0c090c3b9ec",
-      userName: "",
+      userName: "sirily11",
       loginStatus: false
     };
   }

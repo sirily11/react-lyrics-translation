@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Autosuggest from "react-autosuggest";
-import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Popper from "@material-ui/core/Popper";
+import Paper from "@material-ui/core/Paper";
+import { MenuList, Menu } from "@material-ui/core";
 
 export default class NormalText extends Component {
   constructor() {
@@ -11,96 +11,85 @@ export default class NormalText extends Component {
     this.state = {
       value: "",
       suggestions: [],
-      autoSuggestions: []
+      anchorEl: null
     };
-    this.getSuggestionValue = suggestion => suggestion.name;
   }
   componentDidMount() {
+    if(this.props.line_translation !== null){
     this.setState({
-      value: this.props.line_translation,
-      autoSuggestions: this.props.autoSuggestions
+      value: this.props.line_translation
     });
   }
-
-  componentWillReceiveProps(newProps) {
-    console.log(newProps);
   }
 
-  onChange = (event, { newValue }) => {
+  onChange(e) {
+    let value = e.target.value;
     this.setState({
-      value: newValue
+      value: value
     });
-  };
+    let translated = this.props.translatedLine;
+    let suggestions = translated.filter(trans => {
+      if (trans.content !== null) {
+        if (
+          trans.content.includes(value) &&
+          trans.content !== value &&
+          value !== ""
+        ) {
+          return trans.content;
+        }
+      }
+    });
+    const { currentTarget } = e;
+    this.setState({ suggestions: suggestions, anchorEl: currentTarget });
+  }
 
   onUnfoucus(e) {
-    this.props.update({
-      index: this.props.index,
-      content: e.target.value
+    this.props.update(this.props.index, e.target.value);
+  }
+
+  onSuggestClick(e) {
+    let value = e.target.id;
+    this.setState({
+      value: value,
+      suggestions: []
     });
   }
 
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value)
+  renderSuggestions() {
+    return this.state.suggestions.map(suggest => {
+      return (
+        <MenuItem
+          id={suggest.content}
+          onClick={this.onSuggestClick.bind(this)}
+          key={suggest.index}
+        >
+          {suggest.content}
+        </MenuItem>
+      );
     });
-  };
-
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
-  };
-
-  getSuggestions(value) {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-    return inputLength === 0
-      ? []
-      : this.state.autoSuggestions.filter(
-          suggestion =>
-            suggestion.content.toLowerCase().slice(0, inputLength) ===
-            inputValue
-        );
   }
 
   render() {
-    const { value, suggestions } = this.state;
     return (
       <div>
-        <Autosuggest
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={suggestion => suggestion.content}
-          renderSuggestion={suggestions => {
-            return (
-              <MenuItem component="div">
-                <div>{suggestions.content}</div>
-              </MenuItem>
-            );
-          }}
-          inputProps={{
-            value: value,
-            onChange: this.onChange,
-            label: this.props.line_content
-          }}
-          renderSuggestionsContainer={options => (
-            <Paper {...options.containerProps} square>
-              {options.children}
-            </Paper>
-          )}
-          renderInputComponent={props => {
-            return (
-              <TextField
-                {...props}
-                margin="normal"
-                variant="outlined"
-                onBlur={this.onUnfoucus.bind(this)}
-                fullWidth
-              />
-            );
-          }}
+        <TextField
+          aria-describedby="0"
+          value={this.state.value}
+          label={this.props.line_content}
+          margin="normal"
+          variant="outlined"
+          onBlur={this.onUnfoucus.bind(this)}
+          onChange={this.onChange.bind(this)}
+          fullWidth
         />
+        <Popper
+          id="0"
+          open={this.state.suggestions.length !== 0}
+          anchorEl={this.state.anchorEl}
+          placement="bottom-start"
+        >
+          <Paper> {this.renderSuggestions()}</Paper>
+        </Popper>
       </div>
     );
   }

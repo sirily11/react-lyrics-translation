@@ -53,6 +53,7 @@ let languageTranslation = {
     start_project_btn: "开始项目",
     artistText: "歌手",
     songText: "歌名",
+    lyricsText : "歌词",
     welcomeText:
       "欢迎来到歌词翻译网站，请先登录，之后轻点下方的开始项目按钮，便可以轻松创建属于你的歌词翻译项目。",
     welcomeTextHeader: "开始使用",

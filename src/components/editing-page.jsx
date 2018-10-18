@@ -12,9 +12,10 @@ class EditingPage extends Component {
   constructor() {
     super();
     this.state = {
-      songInfo: {},
       lines: [],
+      songInfo: {},
       autoSuggest: [],
+      translated: [],
       isloaded: false
     };
   }
@@ -29,20 +30,23 @@ class EditingPage extends Component {
     });
 
     let userID = state.userID;
-    $.getJSON(
-      `${settings.baseURL}/${userID}/${state.title}/${state.artist}`
-    ).done(data => {
+    $.getJSON(settings.getURL("get/projects/lyrics"), {
+      userID: userID,
+      artist: state.artist,
+      title: state.title
+    }).done(data => {
       this.setState({
         lines: data["lines"],
-        isloaded: true
+        isloaded: true,
+        translated: this.getTranslated(data["lines"])
       });
     });
   }
 
-  autoSuggestions() {
+  getTranslated(lines) {
     let returnlst = [];
     let i = 0;
-    for (let line of this.state.lines) {
+    for (let line of lines) {
       if (line["line-translation"] !== "") {
         returnlst.push({
           index: i,
@@ -55,15 +59,14 @@ class EditingPage extends Component {
   }
 
   createNormalText() {
-    let suggestions = this.autoSuggestions();
-    console.log("A");
     return this.state.lines.map((line, index) => {
       return (
         <NormalText
           key={index}
           line_content={line["line-content"]}
           line_translation={line["line-translation"]}
-          autoSuggestions={suggestions}
+          change={this.changeHandler.bind(this)}
+          translatedLine={this.state.translated}
           index={index}
           update={this.updateHandler.bind(this)}
         />
@@ -71,19 +74,31 @@ class EditingPage extends Component {
     });
   }
 
-  updateHandler(data) {
-    let oldSuggestion = this.state.autoSuggest;
-    for (let i = 0; i < oldSuggestion.length; i++) {
-      if (oldSuggestion[i].index === data.index) {
-        oldSuggestion[i].content = data.content;
-      } else {
-        oldSuggestion.push(data);
+  updateHandler(index, value) {
+    let lines = this.state.lines;
+    let translated = this.state.translated;
+    let i = -1;
+    if (value === "") return;
+    for (let t of translated) {
+      if (t.index === index) {
+        i = index;
       }
     }
-    console.log(this.state.autoSuggest);
-    // this.setState({
-    //   autoSuggest: oldSuggestion
-    // });
+    if (i != -1) {
+      translated[i].content = value;
+    } else {
+      translated.push({ index: translated.length, content: value });
+    }
+    lines[index] = value;
+    // console.log(translated);
+    this.setState({
+      translated: translated,
+      lines: lines
+    });
+  }
+
+  changeHandler(value) {
+  
   }
 
   render() {
@@ -96,24 +111,26 @@ class EditingPage extends Component {
           link="/"
         />
         <Navbar title={this.state.songInfo.artist} color="default" />
-        <Fade in={!this.state.isloaded} timeout={1000}>
-          <LinearProgress color="secondary" />
-        </Fade>
-        <Selector
-          className="selector"
-          selections={[
-            {
-              mode: "words",
-              text: this.props.languageTranslation.words
-            },
-            {
-              mode: "sentences",
-              text: this.props.languageTranslation.sentences
-            }
-          ]}
-          title={this.props.languageTranslation.type_selector}
-        />
-        {this.createNormalText()}
+        <div className="container-fluid">
+          <Fade in={!this.state.isloaded} timeout={1000}>
+            <LinearProgress color="secondary" />
+          </Fade>
+          <Selector
+            className="selector"
+            selections={[
+              {
+                mode: "words",
+                text: this.props.languageTranslation.words
+              },
+              {
+                mode: "sentences",
+                text: this.props.languageTranslation.sentences
+              }
+            ]}
+            title={this.props.languageTranslation.type_selector}
+          />
+          {this.createNormalText()}
+        </div>
       </div>
     );
   }
