@@ -1,16 +1,27 @@
 import React, { Component } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Fade from "@material-ui/core/Fade";
-import Grow from "@material-ui/core/Grow";
+import {
+  MuiThemeProvider,
+  createMuiTheme,
+  IconButton,
+  Grow,
+  Fade,
+  Snackbar
+} from "@material-ui/core";
+import purple from "@material-ui/core/colors/purple";
 import $ from "jquery";
-import ProjectCard from "./projectcard";
-import Navbar from "./navbar";
-import Startcard from "./Startcard";
-import NewProject from "./newProject";
-import Snackbar from "@material-ui/core/Snackbar";
-import IconButton from "@material-ui/core/IconButton";
+import ProjectCard from "../parts/projectcard";
+import Navbar from "../parts/navbar";
+import Startcard from "../parts/Startcard";
+import NewProject from "../parts/newProject";
 import CloseIcon from "@material-ui/icons/Close";
-import Button from "@material-ui/core/Button";
+import settings from "../settings/settings";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: purple
+  }
+});
 
 export default class Home extends Component {
   constructor() {
@@ -43,18 +54,19 @@ export default class Home extends Component {
   }
 
   getProject(userID) {
-    $.getJSON(
-      `https://api.mytranshelper.com/api/get_all_projects_list/${userID}`
-    )
+    $.getJSON(settings.getURL("get/projects"), { user_id: userID })
       .done(data => {
-        this.setState({ projects: data, isloaded: true });
-        sessionStorage.setItem(
-          "projectsData",
-          JSON.stringify({
-            projects: data
-          })
-        );
-        $("#musiclist-loadingbar").fadeOut(200);
+        console.log(data);
+        if (data.projects !== undefined) {
+          this.setState({ projects: data.projects, isloaded: true });
+          sessionStorage.setItem(
+            "projectsData",
+            JSON.stringify({
+              projects: data.projects
+            })
+          );
+          $("#musiclist-loadingbar").fadeOut(200);
+        }
       })
       .fail(() => {
         let response = sessionStorage.getItem("projectsData");
@@ -67,11 +79,13 @@ export default class Home extends Component {
       });
   }
 
-  removeHandler(artist, title) {
+  removeHandler(id) {
     let projects = this.state.projects;
+    console.log(id);
     for (let i = 0; i < projects.length; i++) {
       let project = projects[i];
-      if (project.title == title && project.artist == artist) {
+      if (project.sid === id) {
+        console.log(id)
         projects.splice(i, 1);
         this.setState({
           projects: projects
@@ -110,30 +124,33 @@ export default class Home extends Component {
   }
 
   closeDialog() {
-    console.log("close");
     this.setState({
       openCreateDialog: false
     });
   }
 
   createProjectCard() {
-    return this.state.projects.map(project => {
-      return (
-        <ProjectCard
-          key={project.title}
-          title={project.title}
-          artist={project.artist}
-          loadBtn={this.props.languageTranslation.loadProjectText}
-          userID={this.props.userID}
-          remove={this.removeHandler.bind(this)}
-        />
-      );
-    });
+    if (this.state.projects.length > 0) {
+      return this.state.projects.map(project => {
+        return (
+          <ProjectCard
+            sid={project.sid}
+            key={project.title}
+            title={project.title}
+            artist={project.artist}
+            image={project.image}
+            loadBtn={this.props.languageTranslation.loadProjectText}
+            userID={this.props.userID}
+            remove={this.removeHandler.bind(this)}
+          />
+        );
+      });
+    }
   }
 
   render() {
     return (
-      <div>
+      <MuiThemeProvider theme={theme}>
         <Navbar
           icon="menu"
           title={this.props.languageTranslation.title}
@@ -195,7 +212,7 @@ export default class Home extends Component {
             ]}
           />
         </div>
-      </div>
+      </MuiThemeProvider>
     );
   }
 }

@@ -6,7 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Slide from "@material-ui/core/Slide";
 import Collapse from "@material-ui/core/Collapse";
-import settings from "./settings/settings";
+import settings from "../settings/settings";
 import $ from "jquery";
 
 export default class DialogAuth extends Component {
@@ -32,38 +32,27 @@ export default class DialogAuth extends Component {
     } else {
       let url = "";
       if (this.props.title.includes("Sign")) {
-        url = settings.getURL("post/sign_up");
-        console.log("contains sign_up");
+        url = settings.getURL("sign_up");
       } else {
-        url = settings.getURL("post/login");
+        url = settings.getURL("login");
       }
-      $.ajax({
-        type: "POST",
-        url: url,
-        data: JSON.stringify({
-          user_name: use,
-          password: pas
-        }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: data => {
-          if (data.status !== true) {
-            this.setState({
-              errorShow: true,
-              errorMessage: data.info
-            });
-          } else {
-            this.props.login(data.userid, data.user_name);
-            this.props.closeDialog();
-          }
-          console.log(data);
+
+      $.post(url, {userName: use, password: pas}, (data)=>{
+        if (data.status !== true) {
+          this.setState({
+            errorShow: true,
+            errorMessage: data.info
+          });
+        } else {
+          this.props.login(data.userID, data.user_name);
+          this.props.closeDialog();
         }
-      });
+      })
     }
-    //
   }
 
   cancel() {
+    this.setState({errorMessage : ""})
     this.props.closeDialog();
   }
 

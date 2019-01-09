@@ -1,8 +1,10 @@
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
-import EditingPage from "./components/editing-page";
-import Home from "./components/homePage";
+import EditingPage from "./components/pages/editing-page";
+import Home from "./components/pages/homePage";
 import languageTranslation from "./components/settings/language";
 import React, { Component } from "react";
+import $ from 'jquery'
+import settings from "./components/settings/settings";
 import "material-design-lite/material.min.css";
 import "material-design-lite/material.min.js";
 import "./App.css";
@@ -11,8 +13,6 @@ class App extends Component {
   constructor() {
     super();
     let languageCode = navigator.language.substr(0, 2);
-    //e225f036-bef7-11e8-a97b-b0c090c3b9ec
-    //sirily11
     this.state = {
       title: "",
       translation: languageTranslation[languageCode],
@@ -23,6 +23,15 @@ class App extends Component {
   }
 
   componentWillMount() {
+    $.getJSON(settings.getURL('csrf'),(data) =>{
+      console.log(data)
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", data.csrfToken);
+        }
+    });
+      sessionStorage.setItem('csrfToken', data.csrfToken)
+    })
     let response = sessionStorage.getItem("userData");
     if (response !== null) {
       let userData = JSON.parse(response);
@@ -68,7 +77,7 @@ class App extends Component {
           <Switch>
             <Route
               exact
-              path="/"
+              path="/api_translator/"
               render={props => (
                 <Home
                   {...props}
@@ -82,7 +91,7 @@ class App extends Component {
               )}
             />
             <Route
-              path="/editing"
+              path="/api_translator/editing"
               render={props => (
                 <EditingPage
                   {...props}
