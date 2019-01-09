@@ -4,6 +4,8 @@ import TextField from "@material-ui/core/TextField";
 import Popper from "@material-ui/core/Popper";
 import Paper from "@material-ui/core/Paper";
 import { MenuList, Menu } from "@material-ui/core";
+import settings from '../settings/settings';
+import $ from 'jquery'
 
 export default class NormalText extends Component {
   constructor() {
@@ -22,8 +24,9 @@ export default class NormalText extends Component {
   }
   }
 
-  onChange(e) {
+  onChange(e,) {
     let value = e.target.value;
+    let origin = this.props.line_content
     this.setState({
       value: value
     });
@@ -44,6 +47,7 @@ export default class NormalText extends Component {
   }
 
   onUnfoucus(e) {
+    this.setState({suggestions: []})
     this.props.update(this.props.index, e.target.value);
   }
 
@@ -87,6 +91,8 @@ export default class NormalText extends Component {
           open={this.state.suggestions.length !== 0}
           anchorEl={this.state.anchorEl}
           placement="bottom-start"
+          style={{zIndex: 1}}
+          transition
         >
           <Paper> {this.renderSuggestions()}</Paper>
         </Popper>

@@ -8,7 +8,16 @@ import React, { Component } from "react";
 import Selector from "../parts/selector";
 import settings from "../settings/settings";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
-import { IconButton, Menu, MenuItem } from "@material-ui/core";
+import {
+  TextField,
+  IconButton,
+  Menu,
+  MenuItem,
+  BottomNavigation,
+  BottomNavigationAction,
+  Paper
+} from "@material-ui/core";
+import BottomNav from "../BottomNav";
 
 class EditingPage extends Component {
   constructor() {
@@ -186,7 +195,7 @@ class EditingPage extends Component {
           icon="arrowBack"
           title={this.state.songInfo.title}
           color="secondary"
-          link="/"
+          link="/api_translator/home"
         />
         <Navbar
           title={this.state.songInfo.artist + "---" + this.state.msg}
@@ -263,6 +272,7 @@ class EditingPage extends Component {
             </div>
           </div>
           {this.createText()}
+          <BottomNav />
         </div>
       </div>
     );
