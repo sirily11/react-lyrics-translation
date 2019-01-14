@@ -11,8 +11,7 @@ import DoneIcon from "@material-ui/icons/Done";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddPhotoAlternate from "@material-ui/icons/AddPhotoAlternate";
 import $ from "jquery";
-import settings from "../settings/settings";
-import defaultImage from '../../assets/img/md-img1.jpg'
+import settings from "../../settings/settings";
 
 
 export default class NewProject extends Component {

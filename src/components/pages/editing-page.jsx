@@ -1,23 +1,19 @@
 import $ from "jquery";
 import Fade from "@material-ui/core/Fade";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import Navbar from "../parts/navbar";
-import NormalText from "../parts/normal-text";
+import Navbar from "../parts/home/navbar";
+import NormalText from "../parts/editing/normal-text";
 import { withRouter } from "react-router-dom";
 import React, { Component } from "react";
-import Selector from "../parts/selector";
+import Selector from "../parts/editing/selector";
 import settings from "../settings/settings";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
-import {
-  TextField,
-  IconButton,
-  Menu,
-  MenuItem,
-  BottomNavigation,
-  BottomNavigationAction,
-  Paper
-} from "@material-ui/core";
-import BottomNav from "../BottomNav";
+import { IconButton, Menu, MenuItem } from "@material-ui/core";
+import BottomNav from "../parts/editing/BottomNav";
+import { register } from "../../serviceWorker";
+import FloatButton from "../parts/audio/FloatButton";
+import MusicSelector from "../parts/audio/MusicSelector";
+import language from "../settings/language";
 
 class EditingPage extends Component {
   constructor() {
@@ -31,7 +27,10 @@ class EditingPage extends Component {
       translated: [],
       isloaded: false,
       mode: "normal_text",
-      msg: ""
+      msg: "",
+      openMusicSelector: false,
+      songID: null,
+      playingSongName: ""
     };
     this.numOfTranslation = 0;
     this.uploadTranslation = [];
@@ -62,11 +61,13 @@ class EditingPage extends Component {
     });
   }
 
+  componentWillMount() {}
+
   getTranslated(lines) {
     let returnlst = [];
     let i = 0;
     for (let line of lines) {
-      if (line["line-translation"] !== "") {
+      if (line["line_translation"] !== "") {
         returnlst.push({
           index: i,
           content: line["line_translation"]
@@ -77,14 +78,72 @@ class EditingPage extends Component {
     return returnlst;
   }
 
+  addNewLine(position) {
+    let lines = this.state.lines;
+    let firstpart = lines.slice(0, position + 1);
+    let secondpart = lines.slice(position + 1, lines.length - 1);
+    firstpart.push({ line_content: "", line_translation: null });
+    let result = firstpart.concat(secondpart);
+    console.log(this.state.songInfo);
+    $.post(
+      settings.getURL("add/new/line"),
+      {
+        position: position,
+        userID: this.state.userID,
+        sid: this.state.songInfo.sid
+      },
+      data => {
+        if (data.status) {
+          this.setState({ lines: result });
+        }
+      }
+    );
+  }
+
+  changeLine(position, content) {
+    $.post(
+      settings.getURL("update/line"),
+      {
+        position: position,
+        userID: this.state.userID,
+        sid: this.state.songInfo.sid,
+        data: content
+      },
+      data => {
+        if (data.status) {
+          console.log("Updated changes ");
+        }
+      }
+    );
+  }
+
+  removeLine(position) {
+    $.post(
+      settings.getURL("delete/line"),
+      {
+        position: position,
+        userID: this.state.userID,
+        sid: this.state.songInfo.sid
+      },
+      data => {
+        if (data.status) {
+        }
+      }
+    );
+  }
+
   createNormalText() {
     return this.state.lines.map((line, index) => {
       return (
         <NormalText
+          addNewLine={this.addNewLine.bind(this)}
+          removeLine={this.removeLine.bind(this)}
+          change={this.changeLine.bind(this)}
           key={index}
           line_content={line["line_content"]}
-          line_translation={line["line_translation"]}
-          change={this.changeHandler.bind(this)}
+          line_translation={
+            line["line_translation"] === null ? "" : line.line_translation
+          }
           translatedLine={this.state.translated}
           index={index}
           update={this.updateHandler.bind(this)}
@@ -140,8 +199,6 @@ class EditingPage extends Component {
     }
   }
 
-  changeHandler(value) {}
-
   createText() {
     switch (this.state.mode) {
       case "normal_text":
@@ -181,7 +238,7 @@ class EditingPage extends Component {
 
   download(txt) {
     let element = document.createElement("a");
-    let file = new Blob([txt], { type: "text/plain" });
+    let file = new Blob(["\ufeff", txt], { type: "text/plain;charset=utf-8" });
     element.href = URL.createObjectURL(file);
     element.download = `${this.state.songInfo.title}-translation.txt`;
     element.click();
@@ -201,7 +258,7 @@ class EditingPage extends Component {
           title={this.state.songInfo.artist + "---" + this.state.msg}
           color="default"
         />
-        <div className="container-fluid">
+        <div className="container-fluid h-100">
           <Fade in={!this.state.isloaded} timeout={1000}>
             <LinearProgress color="secondary" />
           </Fade>
@@ -212,25 +269,19 @@ class EditingPage extends Component {
                 selections={[
                   {
                     mode: "words",
-                    text: this.props.languageTranslation.words
+                    text: language.words
                   },
                   {
                     mode: "sentences",
-                    text: this.props.languageTranslation.sentences
+                    text: language.sentences
                   }
                 ]}
-                title={this.props.languageTranslation.type_selector}
+                title={language.type_selector}
               />
             </div>
             <div className="col-2 mr-0">
               <IconButton
                 onClick={e => {
-                  // let txt = this.createDownloadFileTranslationWithOriginal()
-                  // let element = document.createElement('a')
-                  // let file = new Blob([txt],{type: 'text/plain'})
-                  // element.href = URL.createObjectURL(file)
-                  // element.download = `${this.state.songInfo.title}-translation.txt`
-                  // element.click()
                   this.setState({ anchorEl: e.currentTarget });
                 }}
               >
@@ -271,9 +322,34 @@ class EditingPage extends Component {
               </Menu>
             </div>
           </div>
-          {this.createText()}
-          <BottomNav />
+          <div style={{ marginBottom: window.innerHeight * 0.12 }}>
+            {this.createText()}
+          </div>
+          <FloatButton
+            openMusicSelector={() => {
+              this.setState({ openMusicSelector: true });
+            }}
+          />
         </div>
+        <MusicSelector
+          onClick={(id, name) => {
+            this.setState({
+              songID: id,
+              openMusicSelector: false,
+              playingSongName: name
+            });
+          }}
+          openDialog={this.state.openMusicSelector}
+          close={() => {
+            this.setState({ openMusicSelector: false });
+          }}
+          musicInstance={this.props.musicInstance}
+        />
+        <BottomNav
+          musicInstance={this.props.musicInstance}
+          songID={this.state.songID}
+          songName={this.state.playingSongName}
+        />
       </div>
     );
   }

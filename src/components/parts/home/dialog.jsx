@@ -6,7 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Slide from "@material-ui/core/Slide";
 import Collapse from "@material-ui/core/Collapse";
-import settings from "../settings/settings";
+import settings from "../../settings/settings";
 import $ from "jquery";
 
 export default class DialogAuth extends Component {

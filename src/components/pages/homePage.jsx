@@ -10,12 +10,14 @@ import {
 } from "@material-ui/core";
 import purple from "@material-ui/core/colors/purple";
 import $ from "jquery";
-import ProjectCard from "../parts/projectcard";
-import Navbar from "../parts/navbar";
-import Startcard from "../parts/Startcard";
-import NewProject from "../parts/newProject";
+import ProjectCard from "../parts/home/projectcard";
+import Navbar from "../parts/home/navbar";
+import Startcard from "../parts/home/Startcard";
+import NewProject from "../parts/home/newProject";
 import CloseIcon from "@material-ui/icons/Close";
 import settings from "../settings/settings";
+import language from '../settings/language';
+
 
 const theme = createMuiTheme({
   palette: {
@@ -48,7 +50,7 @@ export default class Home extends Component {
         this.setState({
           projects: []
         });
-        sessionStorage.removeItem("projectsData");
+        localStorage.removeItem("projectsData");
       }
     }
   }
@@ -56,10 +58,9 @@ export default class Home extends Component {
   getProject(userID) {
     $.getJSON(settings.getURL("get/projects"), { user_id: userID })
       .done(data => {
-        console.log(data);
         if (data.projects !== undefined) {
           this.setState({ projects: data.projects, isloaded: true });
-          sessionStorage.setItem(
+          localStorage.setItem(
             "projectsData",
             JSON.stringify({
               projects: data.projects
@@ -69,7 +70,7 @@ export default class Home extends Component {
         }
       })
       .fail(() => {
-        let response = sessionStorage.getItem("projectsData");
+        let response = localStorage.getItem("projectsData");
         if (response !== null) {
           let projects = JSON.parse(response);
           this.setState({
@@ -108,7 +109,7 @@ export default class Home extends Component {
   openCreateDialog() {
     if (this.props.loginStatus !== true) {
       this.setState({
-        warning: this.props.languageTranslation.not_login
+        warning: language.not_login
       });
     } else {
       this.setState({
@@ -139,7 +140,7 @@ export default class Home extends Component {
             title={project.title}
             artist={project.artist}
             image={project.image}
-            loadBtn={this.props.languageTranslation.loadProjectText}
+            loadBtn={language.loadProjectText}
             userID={this.props.userID}
             remove={this.removeHandler.bind(this)}
           />
@@ -153,8 +154,8 @@ export default class Home extends Component {
       <MuiThemeProvider theme={theme}>
         <Navbar
           icon="menu"
-          title={this.props.languageTranslation.title}
-          languageTranslation={this.props.languageTranslation}
+          title={language.title}
+          languageTranslation={language}
           userName={this.props.userName}
           loginStatus={this.props.loginStatus}
           login={this.props.login}
@@ -164,19 +165,19 @@ export default class Home extends Component {
           <NewProject
             open={this.state.openCreateDialog}
             close={this.closeDialog.bind(this)}
-            languageTranslation={this.props.languageTranslation}
+            languageTranslation={language}
             userID={this.props.userID}
             userName={this.props.userName}
             update={this.addProject.bind(this)}
           />
           <Startcard
             openDialog={this.openCreateDialog.bind(this)}
-            languageTranslation={this.props.languageTranslation}
+            languageTranslation={language}
           />
           <div>
             <div>
               <i className="material-icons mdl-chip__contact">list</i>
-              {this.props.languageTranslation.projectTag}
+              {language.projectTag}
               <Fade
                 in={!this.state.isloaded}
                 timeout={{ enter: 0, exit: 2000 }}

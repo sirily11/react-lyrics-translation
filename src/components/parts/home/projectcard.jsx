@@ -4,8 +4,9 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import IconButton from "@material-ui/core/IconButton";
-import settings from "../settings/settings";
+import settings from "../../settings/settings";
 import $ from "jquery";
+import EditableHeader from "./EditableHeader";
 
 export default class ProjectCard extends Component {
   constructor() {
@@ -21,7 +22,7 @@ export default class ProjectCard extends Component {
     });
   }
 
-  handleClose(from){
+  handleClose(from) {
     this.setState({ anchorEl: null });
     switch (from) {
       case "delete":
@@ -32,7 +33,7 @@ export default class ProjectCard extends Component {
             sid: this.props.sid
           },
           data => {
-            if(data.status === true){
+            if (data.status === true) {
               this.props.remove(this.props.sid);
             }
           }
@@ -40,7 +41,7 @@ export default class ProjectCard extends Component {
 
         break;
     }
-  };
+  }
 
   delete() {}
 
@@ -50,14 +51,19 @@ export default class ProjectCard extends Component {
     const { anchorEl } = this.state;
     return (
       <div className="col-sm-6 col-md-4 col-lg-4">
-        <div className=" project-card mdc-card pcard">
+        <div className=" project-card mdc-card pcard ">
           <div
-            className="mdl-card__title mdl-card--expand projectCard"
+            className="projectCard container"
             style={{ background: `url(${this.props.image})  center / cover` }}
           >
-            <h2 className="mdl-card__title-text project-title">
-              {artist + "-" + title }
-            </h2>
+
+              <EditableHeader
+                artist={artist}
+                title={title}
+                onChange={changed => {
+                  console.log(changed);
+                }}
+              />
           </div>
           <div className="mdl-card__actions mdl-card--border row">
             <div className="col-10">
@@ -68,7 +74,7 @@ export default class ProjectCard extends Component {
                     userID: this.props.userID,
                     artist: artist,
                     title: title,
-                    sid : this.props.sid
+                    sid: this.props.sid
                   }
                 }}
                 className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
@@ -87,9 +93,12 @@ export default class ProjectCard extends Component {
                 id="simple-menu"
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
-                onClose={this.handleClose.bind(this,"close")}
+                onClose={this.handleClose.bind(this, "close")}
               >
-                <MenuItem id="delete" onClick={this.handleClose.bind(this,"delete")}>
+                <MenuItem
+                  id="delete"
+                  onClick={this.handleClose.bind(this, "delete")}
+                >
                   Delete
                 </MenuItem>
               </Menu>

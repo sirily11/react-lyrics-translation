@@ -1,4 +1,5 @@
 let current_version = 0.3;
+
 let languageTranslation = {
   en: {
     start_project_btn: "Start Project",
@@ -102,4 +103,6 @@ let languageTranslation = {
     not_login: "尚未登陆"
   }
 };
-export default languageTranslation;
+let languageCode = navigator.language.substr(0, 2);
+let language = languageTranslation[languageCode]
+export default language;

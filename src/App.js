@@ -12,27 +12,18 @@ import "./App.css";
 class App extends Component {
   constructor() {
     super();
-    let languageCode = navigator.language.substr(0, 2);
     this.state = {
       title: "",
-      translation: languageTranslation[languageCode],
       userID: "",
       userName: "",
-      loginStatus: false
+      loginStatus: false,
+      musicInstance : null
     };
   }
 
   componentWillMount() {
-    $.getJSON(settings.getURL('csrf'),(data) =>{
-      console.log(data)
-      $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", data.csrfToken);
-        }
-    });
-      sessionStorage.setItem('csrfToken', data.csrfToken)
-    })
     let response = sessionStorage.getItem("userData");
+    this.setState({musicInstance: this.props.musicInstance})
     if (response !== null) {
       let userData = JSON.parse(response);
       this.setState({
@@ -81,7 +72,6 @@ class App extends Component {
               render={props => (
                 <Home
                   {...props}
-                  languageTranslation={this.state.translation}
                   userID={this.state.userID}
                   userName={this.state.userName}
                   loginStatus={this.state.loginStatus}
@@ -95,7 +85,7 @@ class App extends Component {
               render={props => (
                 <EditingPage
                   {...props}
-                  languageTranslation={this.state.translation}
+                  musicInstance={this.state.musicInstance}
                 />
               )}
             />
