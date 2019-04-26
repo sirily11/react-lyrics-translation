@@ -69,7 +69,7 @@ export default class ProjectCard extends Component {
             <div className="col-10">
               <Link
                 to={{
-                  pathname: "/api_translator/editing",
+                  pathname: "/editing",
                   state: {
                     userID: this.props.userID,
                     artist: artist,

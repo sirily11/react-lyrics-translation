@@ -31,7 +31,6 @@ export default class Navbar extends Component {
   }
 
   handleDialog(title, buttonTitle) {
-    console.log("Open");
     this.setState({
       drawerOpen: false,
       dialogOpen: true,
@@ -57,8 +56,8 @@ export default class Navbar extends Component {
       );
     } else if (this.props.icon === "menu") {
       return (
-        <IconButton color={"inherit"}>
-          <MenuIcon onClick={this.toggleDrawer.bind(this)} />
+        <IconButton color={"inherit"} onClick={this.toggleDrawer.bind(this)} >
+          <MenuIcon />
         </IconButton>
       );
     } else {

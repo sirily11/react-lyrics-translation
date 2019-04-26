@@ -68,7 +68,7 @@ class App extends Component {
           <Switch>
             <Route
               exact
-              path=""
+              path="/"
               render={props => (
                 <Home
                   {...props}
@@ -81,7 +81,7 @@ class App extends Component {
               )}
             />
             <Route
-              path="/api_translator/editing"
+              path="/editing"
               render={props => (
                 <EditingPage
                   {...props}
