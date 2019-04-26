@@ -1,15 +1,15 @@
 {
-  "main.css": "/static/css/main.e272b68c.chunk.css",
-  "main.js": "/static/js/main.f118e5a1.chunk.js",
-  "main.js.map": "/static/js/main.f118e5a1.chunk.js.map",
-  "static/css/1.85640794.chunk.css": "/static/css/1.85640794.chunk.css",
-  "static/js/1.e7044e16.chunk.js": "/static/js/1.e7044e16.chunk.js",
-  "static/js/1.e7044e16.chunk.js.map": "/static/js/1.e7044e16.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
-  "static/css/1.85640794.chunk.css.map": "/static/css/1.85640794.chunk.css.map",
-  "static/css/main.e272b68c.chunk.css.map": "/static/css/main.e272b68c.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.ac623af41f44a58829e320c9a6e59fea.js": "/precache-manifest.ac623af41f44a58829e320c9a6e59fea.js",
-  "service-worker.js": "/service-worker.js"
+  "main.css": "/react-lyrics-translation/static/css/main.ba35cf3e.chunk.css",
+  "main.js": "/react-lyrics-translation/static/js/main.cc34236a.chunk.js",
+  "main.js.map": "/react-lyrics-translation/static/js/main.cc34236a.chunk.js.map",
+  "static/css/1.301941cb.chunk.css": "/react-lyrics-translation/static/css/1.301941cb.chunk.css",
+  "static/js/1.592ecba9.chunk.js": "/react-lyrics-translation/static/js/1.592ecba9.chunk.js",
+  "static/js/1.592ecba9.chunk.js.map": "/react-lyrics-translation/static/js/1.592ecba9.chunk.js.map",
+  "runtime~main.js": "/react-lyrics-translation/static/js/runtime~main.d0cac7de.js",
+  "runtime~main.js.map": "/react-lyrics-translation/static/js/runtime~main.d0cac7de.js.map",
+  "static/css/1.301941cb.chunk.css.map": "/react-lyrics-translation/static/css/1.301941cb.chunk.css.map",
+  "static/css/main.ba35cf3e.chunk.css.map": "/react-lyrics-translation/static/css/main.ba35cf3e.chunk.css.map",
+  "index.html": "/react-lyrics-translation/index.html",
+  "precache-manifest.3662ea1b26b4ce5d82f17dbe3e4ebc95.js": "/react-lyrics-translation/precache-manifest.3662ea1b26b4ce5d82f17dbe3e4ebc95.js",
+  "service-worker.js": "/react-lyrics-translation/service-worker.js"
 }
