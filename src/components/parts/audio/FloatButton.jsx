@@ -23,8 +23,8 @@ export default class FloatButton extends Component {
 
     return (
       <div
-        className="position-absolute"
         style={{
+          position: "fixed",
           right: 10,
           bottom: bottom
         }}
