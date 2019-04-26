@@ -1,8 +1,8 @@
 let settings = {
   getURL: path => {
-    let baseURL = "https://api.mytranshelper.com/api/";
-    let testURL = `http://${window.location.hostname}/api_translator/`;
-    return testURL + path;
+    let production = `https://sirileepage.com/api_translator/`;
+    let test = `https://0.0.0.0:80/api_translator/`;
+    return production + path;
   }
 };
 

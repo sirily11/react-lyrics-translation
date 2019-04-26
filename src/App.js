@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import { HashRouter, Route, Link, Switch } from "react-router-dom";
 import EditingPage from "./components/pages/editing-page";
 import Home from "./components/pages/homePage";
 import languageTranslation from "./components/settings/language";
@@ -63,12 +63,12 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <HashRouter>
         <div>
           <Switch>
             <Route
               exact
-              path="/api_translator/home"
+              path=""
               render={props => (
                 <Home
                   {...props}
@@ -91,7 +91,7 @@ class App extends Component {
             />
           </Switch>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }

@@ -26,8 +26,8 @@ export default class Player extends Component {
     if (this.props.songID !== prevProps.songID) {
       this.music.setQueue({ song: this.props.songID }).then(queue => {
         this.setState({ playing: true });
-        console.log("Playing");
         this.music.play();
+        console.log("Playing");
         this.music.addEventListener("mediaCanPlay", e => {
           this.total = e.currentPlaybackDuration;
           this.player = e.target;

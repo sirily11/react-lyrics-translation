@@ -9,7 +9,7 @@ export default class Music {
   configure() {
     window.MusicKit.configure({
       developerToken:
-        "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQyVlZLQ0o2TTgifQ.eyJpYXQiOjE1MzQ0Njc1NzMsImV4cCI6MTU1MDAxOTU3MywiaXNzIjoiUDlLSzQ1Mks4UCJ9.wYlP9vG4KQwmT3fq7Ohledoe_PppgqqHCN9DornwzUFosaBaNMKCqGAarNpDiPOuM7ngDgENAMpZz7EfYsWEag",
+        "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlI0SzdGWFc4SDYifQ.eyJpYXQiOjE1NTYyNjQ0NzEsImV4cCI6MTU3MTgxNjQ3MSwiaXNzIjoiUDlLSzQ1Mks4UCJ9.N5tFF_TFkCzMqXUNdL4PskkJV8htTwXPm6MGnwusqnH-GEKnbxBAZCy1clfdL_jEHkbpX4a_7Bya0pmVkTXB-A",
       app: {
         name: "My Cool Web App",
         build: "1978.4.1"
