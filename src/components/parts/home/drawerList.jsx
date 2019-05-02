@@ -11,6 +11,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import EditIcon from "@material-ui/icons/Edit";
 
 import Slide from "@material-ui/core/Slide";
+import { Link } from "react-router-dom";
 
 export default class DrawerList extends Component {
   login(e) {
@@ -87,12 +88,14 @@ export default class DrawerList extends Component {
                 </ListItemIcon>
                 <span>{this.props.languageTranslation["home"]}</span>
               </ListItem>
-              <ListItem button style={{ marginRight: 100 }}>
-                <ListItemIcon>
-                  <BookIcon />
-                </ListItemIcon>
-                <span>{this.props.languageTranslation["logs"]}</span>
-              </ListItem>
+              <Link to="/document">
+                <ListItem button style={{ marginRight: 100 }}>
+                  <ListItemIcon>
+                    <BookIcon />
+                  </ListItemIcon>
+                  <span>{this.props.languageTranslation["logs"]}</span>
+                </ListItem>
+              </Link>
               {this.renderLogBtn()}
             </div>
           </Slide>

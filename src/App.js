@@ -8,6 +8,7 @@ import settings from "./components/settings/settings";
 import "material-design-lite/material.min.css";
 import "material-design-lite/material.min.js";
 import "./App.css";
+import Document from './components/pages/Document';
 
 class App extends Component {
   constructor() {
@@ -86,6 +87,15 @@ class App extends Component {
                 <EditingPage
                   {...props}
                   musicInstance={this.state.musicInstance}
+                />
+              )}
+            />
+
+            <Route
+              path="/document"
+              render={props => (
+                <Document
+                  {...props}
                 />
               )}
             />
