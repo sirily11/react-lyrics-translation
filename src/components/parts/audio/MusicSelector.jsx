@@ -146,6 +146,7 @@ export default class MusicSelector extends Component {
                 className="col-9 col-md-10"
                 id="title"
                 label="Title"
+                defaultValue={this.props.defaultTitle}
                 onChange={e => {
                   this.setState({ value: e.target.value });
                 }}

@@ -19,7 +19,7 @@ export default class FloatButton extends Component {
   }
 
   render() {
-    let bottom = window.innerHeight * 0.15 + 10;
+    let bottom = window.innerHeight * 0.10 + 10;
 
     return (
       <div

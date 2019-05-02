@@ -336,6 +336,7 @@ class EditingPage extends Component {
           />
         </div>
         <MusicSelector
+         defaultTitle={this.state.songInfo.title}
           onClick={(id, name) => {
             this.setState({
               songID: id,
