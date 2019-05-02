@@ -81,7 +81,7 @@ class App extends Component {
               )}
             />
             <Route
-              path="/editing"
+              path="/editing/:userID/:artist/:title/:id"
               render={props => (
                 <EditingPage
                   {...props}

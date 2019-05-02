@@ -37,13 +37,14 @@ class EditingPage extends Component {
   }
 
   componentDidMount() {
-    let { state } = this.props.location;
-    let userID = state.userID;
-    let sid = state.sid;
+    let params = this.props.match.params;
+    console.log(this.props.match.params)
+    let userID = params.userID;
+    let sid = params.id;
     this.setState({
       songInfo: {
-        artist: state.artist,
-        title: state.title,
+        artist: params.artist,
+        title: params.title,
         sid: sid
       },
       userID: userID
@@ -178,8 +179,9 @@ class EditingPage extends Component {
       lines: lines
     });
     // Do the uploading
-    if (this.numOfTranslation > 1) {
+    if (this.numOfTranslation > 0) {
       this.setState({ isloaded: false });
+      this.setState({ msg: "Saving...", isloaded: true });
       $.post(
         settings.getURL("update/translation"),
         {
@@ -188,7 +190,7 @@ class EditingPage extends Component {
           data: JSON.stringify(this.uploadTranslation)
         },
         data => {
-          this.setState({ msg: "Uploaded transaltion", isloaded: true });
+          this.setState({ msg: "All changes has been saved", isloaded: true });
           console.log("Updated");
         }
       ).fail(() => {
@@ -252,7 +254,7 @@ class EditingPage extends Component {
           icon="arrowBack"
           title={this.state.songInfo.title}
           color="secondary"
-          link="/api_translator/home"
+          link="/"
         />
         <Navbar
           title={this.state.songInfo.artist + "---" + this.state.msg}

@@ -68,15 +68,7 @@ export default class ProjectCard extends Component {
           <div className="mdl-card__actions mdl-card--border row">
             <div className="col-10">
               <Link
-                to={{
-                  pathname: "/editing",
-                  state: {
-                    userID: this.props.userID,
-                    artist: artist,
-                    title: title,
-                    sid: this.props.sid
-                  }
-                }}
+                to={`/editing/${this.props.userID}/${artist}/${title}/${this.props.sid}`}
                 className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
               >
                 {this.props.loadBtn}
