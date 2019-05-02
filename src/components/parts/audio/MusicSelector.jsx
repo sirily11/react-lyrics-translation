@@ -37,16 +37,25 @@ export default class MusicSelector extends Component {
 
   componentDidMount() {
     this.music = this.props.musicInstance;
+    
+  }
+
+  componentDidUpdate(prevProps){
+    if(prevProps.defaultTitle !== this.props.defaultTitle && this.props.defaultTitle !== ""){
+      this.setState({value: this.props.defaultTitle})
+    }
   }
 
   search() {
+    if(this.state.value === undefined) return
     this.setState({ loading: true });
     this.music.authorize().then(async () => {
       let result = await this.music.api.search(this.state.value, {
         limit: 10,
         types: "songs"
       });
-      if(result.length > 0){
+      console.log(result)
+      if(result.songs && result.songs.data){
         this.pagination = new Pagination(result.songs.data, 3);
         let items = this.pagination.getCurrentPage();
         this.setState({
@@ -146,7 +155,7 @@ export default class MusicSelector extends Component {
                 className="col-9 col-md-10"
                 id="title"
                 label="Title"
-                defaultValue={this.props.defaultTitle}
+                value={this.state.value}
                 onChange={e => {
                   this.setState({ value: e.target.value });
                 }}
