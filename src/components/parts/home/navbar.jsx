@@ -67,7 +67,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <div>
-        <AppBar position="static" color={this.props.color}>
+        <AppBar position="sticky" color={this.props.color}>
           <Toolbar>
             {this.createIcon()}
             <Typography variant="h6" color="inherit">

@@ -46,15 +46,23 @@ export default class MusicSelector extends Component {
         limit: 10,
         types: "songs"
       });
-      this.pagination = new Pagination(result.songs.data, 3);
-      let items = this.pagination.getCurrentPage();
-      this.setState({
-        songs: result.songs.data,
-        numOfPage: this.pagination.getTotalNumOfPage(),
-        displayItems: items,
-        loading: false
-      });
-      console.log(items);
+      if(result.length > 0){
+        this.pagination = new Pagination(result.songs.data, 3);
+        let items = this.pagination.getCurrentPage();
+        this.setState({
+          songs: result.songs.data,
+          numOfPage: this.pagination.getTotalNumOfPage(),
+          displayItems: items,
+          loading: false
+        });
+        console.log(items);
+      } else{
+        this.setState({
+          numOfPage: 0,
+          loading: false
+        });
+      }
+     
     });
   }
 

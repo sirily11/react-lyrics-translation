@@ -1,11 +1,18 @@
 import React, { Component } from "react";
-import { TextField, Button, MobileStepper,Fade } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  MobileStepper,
+  Fade,
+  Paper
+} from "@material-ui/core";
 import $ from "jquery";
 import settings from "../../settings/settings";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import "rc-slider/assets/index.css";
 import Player from "../audio/Player";
+import Draggable, { DraggableCore } from "react-draggable"; // Both at the same time
 
 export default class BottomNav extends Component {
   constructor() {
@@ -13,7 +20,7 @@ export default class BottomNav extends Component {
     this.state = {
       translation: "",
       pageIndex: 0,
-      playingTime: 0
+      playingTime: 0,
     };
   }
 
@@ -27,8 +34,9 @@ export default class BottomNav extends Component {
 
   renderTranslation() {
     return (
-      <div className="ml-auto mr-auto">
+      <div className="ml-auto mr-auto mt-3 mb-3">
         <TextField
+          id="translation"
           label={"Translation"}
           variant="outlined"
           onBlur={e => {
@@ -39,7 +47,9 @@ export default class BottomNav extends Component {
                   word: e.target.value
                 },
                 data => {
-                  this.setState({ translation: data.translation });
+                  this.setState({
+                    translation: data.translation
+                  });
                 }
               );
             }
@@ -81,25 +91,45 @@ export default class BottomNav extends Component {
   }
 
   render() {
-    let height = window.innerHeight * 0.15;
+    let height = window.innerHeight * 0.1;
     return (
-      <div
-        className="fixed-bottom"
-        style={{ backgroundColor: "#eeeeee", height: height }}
-      >
-        {this.renderStepper()}
-        <Fade in={this.state.pageIndex === 0} unmountOnExit>
-          <div className="row" style={{ height: "100%" }}>
+      <div>
+        x
+        <Draggable
+          handle="#title-bar"
+        >
+          <Paper
+            className="fixed-bottom col-md-5 col-sm-10  m-md-4 mx-sm-auto mb-1 mr-auto"
+            elevation={20}
+            style={{ height: height, borderRadius: "10px" }}
+          >
+            <div className="h-100 w-100">
+            
+              <Player
+                musicInstance={this.props.musicInstance}
+                songID={this.props.songID}
+                songName={this.props.songName}
+              />
+            </div>
+          </Paper>
+        </Draggable>
+        <Fade in={true}>
+        <Draggable cancel="#translation">
+          <Paper
+            elevation={20}
+            className="row  col-md-5 col-5  m-md-4 mx-sm-auto mb-1 mr-auto"
+            style={{
+              height: height,
+              zIndex: 300,
+              borderRadius: "10px",
+              bottom: 100,
+              position: "fixed"
+            }}
+          >
             {this.renderTranslation()}
-          </div>
+          </Paper>
+        </Draggable>
         </Fade>
-          <div style={{ height: "100%", width: "100%" }}>
-            <Player
-              musicInstance={this.props.musicInstance}
-              songID={this.props.songID}
-              songName={this.props.songName}
-            />
-          </div>
       </div>
     );
   }

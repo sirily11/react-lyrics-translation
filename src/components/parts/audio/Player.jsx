@@ -27,7 +27,6 @@ export default class Player extends Component {
       this.music.setQueue({ song: this.props.songID }).then(queue => {
         this.setState({ playing: true });
         this.music.play();
-        console.log("Playing");
         this.music.addEventListener("mediaCanPlay", e => {
           this.total = e.currentPlaybackDuration;
           this.player = e.target;
@@ -50,21 +49,37 @@ export default class Player extends Component {
   }
 
   handleChange = (event, value) => {
-    let portion = value / 100;
-    this.player.currentTime = portion * this.totalTime;
-    this.setState({ currentTime: value });
+    try{
+      console.log(value);
+      let portion = value / 100;
+      this.player.currentTime = portion * this.totalTime;
+      this.setState({ currentTime: value });
+    } catch(err){
+      console.log(err)
+    }
+   
   };
 
   render() {
     return (
       <div>
-        <div className="row">
-          <div className="ml-auto mr-auto mt-2">
+        <div
+        id="title-bar"
+          className="row"
+          style={{
+            backgroundColor: "#ef6c00",
+            height: "40px",
+            borderRadius: "10px"
+          }}
+        >
+          <label className="ml-auto mr-auto mt-2" style={{ color: "white" }}>
+            {" "}
             Now playing {this.props.songName}
-          </div>
+          </label>
         </div>
-        <div className="row ml-auto mr-auto" style={{ width: "90%" }}>
-          <div className="col-2">
+        <div className="row ml-auto mr-auto" style={{ width: "100%" }}
+        >
+          <div className="col-3 w-100">
             <IconButton
               disabled={!this.state.ready}
               onClick={() => {
@@ -80,11 +95,13 @@ export default class Player extends Component {
               {this.state.playing === true ? <PauseIcon /> : <PlayArrowIcon />}
             </IconButton>
           </div>
-          <div className="col-10 my-auto">
+          <div className="col-9 my-auto">
             <Slider
               disabled={!this.state.ready}
               value={this.state.currentTime}
-              onChange={this.handleChange}
+              onChange={(e,value)=>{
+                this.handleChange(e,value)
+              }}
             />
           </div>
         </div>

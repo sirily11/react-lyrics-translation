@@ -190,7 +190,7 @@ class EditingPage extends Component {
           data: JSON.stringify(this.uploadTranslation)
         },
         data => {
-          this.setState({ msg: "All changes has been saved", isloaded: true });
+          this.setState({ msg: "All changes have been saved", isloaded: true });
           console.log("Updated");
         }
       ).fail(() => {
@@ -250,6 +250,7 @@ class EditingPage extends Component {
   render() {
     return (
       <div>
+        <div style={{position:"fixed", zIndex:100, width: "100%"}}>
         <Navbar
           icon="arrowBack"
           title={this.state.songInfo.title}
@@ -260,7 +261,8 @@ class EditingPage extends Component {
           title={this.state.songInfo.artist + "---" + this.state.msg}
           color="default"
         />
-        <div className="container-fluid h-100">
+        </div>
+        <div className="container h-100" style={{paddingTop: "130px"}}>
           <Fade in={!this.state.isloaded} timeout={1000}>
             <LinearProgress color="secondary" />
           </Fade>
