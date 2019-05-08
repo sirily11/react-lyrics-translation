@@ -12,7 +12,7 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import "rc-slider/assets/index.css";
 import Player from "../audio/Player";
-import Draggable, { DraggableCore } from "react-draggable"; // Both at the same time
+import Draggable, { DraggableCore } from "react-draggable";
 
 export default class BottomNav extends Component {
   constructor() {
@@ -34,7 +34,7 @@ export default class BottomNav extends Component {
 
   renderTranslation() {
     return (
-      <div className="ml-auto mr-auto mt-3 mb-3">
+      <div className="ml-auto mr-auto mt-1 mb-3">
         <TextField
           id="translation"
           label={"Translation"}
@@ -55,7 +55,7 @@ export default class BottomNav extends Component {
             }
           }}
         />
-        <div>Translation: {this.state.translation}</div>
+        <div className="">Translation: {this.state.translation}</div>
       </div>
     );
   }
@@ -94,7 +94,6 @@ export default class BottomNav extends Component {
     let height = window.innerHeight * 0.1;
     return (
       <div>
-        x
         <Draggable
           handle="#title-bar"
         >
@@ -113,11 +112,11 @@ export default class BottomNav extends Component {
             </div>
           </Paper>
         </Draggable>
-        <Fade in={true}>
+        
         <Draggable cancel="#translation">
           <Paper
             elevation={20}
-            className="row  col-md-5 col-5  m-md-4 mx-sm-auto mb-1 mr-auto"
+            className="row  col-md-2 col-5  m-md-4 mx-sm-auto mb-1 mr-auto"
             style={{
               height: height,
               zIndex: 300,
@@ -129,7 +128,6 @@ export default class BottomNav extends Component {
             {this.renderTranslation()}
           </Paper>
         </Draggable>
-        </Fade>
       </div>
     );
   }
