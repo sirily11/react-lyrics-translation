@@ -32,7 +32,7 @@ export default class Selector extends Component {
   render() {
     return (
       <div>
-        <FormControl className="selector">
+        <FormControl className="selector" fullWidth>
           <InputLabel>{this.props.title}</InputLabel>
           <Select
             value={this.state.mode}

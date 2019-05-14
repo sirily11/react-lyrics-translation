@@ -48,7 +48,8 @@ let languageTranslation = {
     uploadthetimedlyrics: "Timed lyrics data has been uploaded",
     currentInfo:
       "Problem: Won't be able to highlight the word which has short period.",
-    not_login: "Not login"
+    not_login: "Not login",
+    signUp_btn: "Sign Up",
   },
 
   zh: {
