@@ -95,7 +95,7 @@ export default class Player extends Component {
               {this.state.playing === true ? <PauseIcon /> : <PlayArrowIcon />}
             </IconButton>
           </div>
-          <div className="col-9 my-auto">
+          <div style={{position: "absolute", top: 0}}>
             <Slider
               disabled={!this.state.ready}
               value={this.state.currentTime}

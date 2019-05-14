@@ -112,22 +112,6 @@ export default class BottomNav extends Component {
             </div>
           </Paper>
         </Draggable>
-        
-        <Draggable cancel="#translation">
-          <Paper
-            elevation={20}
-            className="row  col-md-2 col-5  m-md-4 mx-sm-auto mb-1 mr-auto"
-            style={{
-              height: height,
-              zIndex: 300,
-              borderRadius: "10px",
-              bottom: 100,
-              position: "fixed"
-            }}
-          >
-            {this.renderTranslation()}
-          </Paper>
-        </Draggable>
       </div>
     );
   }

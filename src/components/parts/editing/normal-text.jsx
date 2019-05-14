@@ -3,13 +3,15 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import Popper from "@material-ui/core/Popper";
 import Paper from "@material-ui/core/Paper";
-import { MenuList, Menu, IconButton, Collapse } from "@material-ui/core";
+import { MenuList, Menu, IconButton, Collapse, LinearProgress, Fade } from "@material-ui/core";
 import settings from "../../settings/settings";
+import Tooltip from '@material-ui/core/Tooltip';
 import $ from "jquery";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import EditIcon from "@material-ui/icons/Edit";
 import DoneIcon from "@material-ui/icons/Done";
+import TranslateIcon from "@material-ui/icons/Translate";
 
 export default class NormalText extends Component {
   constructor() {
@@ -23,7 +25,8 @@ export default class NormalText extends Component {
       value: "",
       original: null,
       suggestions: [],
-      anchorEl: null
+      anchorEl: null,
+      loading: false
     };
   }
   componentDidMount() {
@@ -33,8 +36,8 @@ export default class NormalText extends Component {
     });
   }
 
-  componentDidUpdate(prevProps){
-    if(this.props !== prevProps){
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
       this.setState({
         value: this.props.line_translation,
         original: this.props.line_content !== "" ? this.props.line_content : "   "
@@ -79,12 +82,31 @@ export default class NormalText extends Component {
     this.setState({ suggestions: [], in: false, edit: false });
   }
 
+  translate = (word) =>{
+    this.setState({loading: true})
+    $.post(
+      settings.getURL("get/translation/word"),
+      {
+        word: word
+      },
+      data => {
+        this.setState({
+          value: data.translation,
+          loading: false
+        });
+        setTimeout(() => {
+          this.props.update(this.props.index,data.translation );
+        }, 200);
+      }
+    );
+  }
+
   renderSuggestions() {
     return this.state.suggestions.map(suggest => {
       return (
         <MenuItem
           id={suggest.content}
-          onClick={()=>{
+          onClick={() => {
             console.log("Clicked")
             this.setState({
               value: suggest.content,
@@ -142,52 +164,79 @@ export default class NormalText extends Component {
           </Popper>
           <Collapse in={this.state.in} timeout={400} mountOnEnter unmountOnExit>
             <div className="row mt-0 mb-0">
-              <div className="col-6 col-md-3 ml-auto mr-auto pt-0 pb-0">
-                <IconButton
-                  className=""
-                  onClick={() => {
-                    this.props.addNewLine(this.props.index);
-                  }}
-                >
-                  <AddCircleIcon />
-                </IconButton>
-                <IconButton
-                  className=""
-                  onClick={() => {
-                    if (this.state.mode === "translate") {
-                      this.setState({
-                        helpText: "Edit original text",
-                        mode: "edit"
-                      });
-                    } else {
-                      console.log("change")
-                      this.props.change(this.props.index, this.state.original)
-                      this.setState({
-                        helpText: null,
-                        mode: "translate"
-                      });
-                    }
-                  }}
-                >
-                  {this.state.mode === "translate" ? (
-                    <EditIcon />
-                  ) : (
-                    <DoneIcon />
-                  )}
-                </IconButton>
-                <IconButton
-                  className=""
-                  onClick={() => {
-                    this.props.removeLine(this.props.index)
-                    this.setState({ delete: true, value: null });
-                  }}
-                >
-                  <RemoveCircleIcon />
-                </IconButton>
+              <div className="mx-auto">
+                <Tooltip title="Add new line">
+                  <IconButton
+                    className=""
+                    onClick={() => {
+                      this.props.addNewLine(this.props.index);
+                    }}
+                  >
+                    <AddCircleIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit Content">
+                  <IconButton
+                    className=""
+                    onClick={() => {
+                      if (this.state.mode === "translate") {
+                        this.setState({
+                          helpText: "Edit original text",
+                          mode: "edit"
+                        });
+                      } else {
+                        console.log("change")
+                        this.props.change(this.props.index, this.state.original)
+                        this.setState({
+                          helpText: null,
+                          mode: "translate"
+                        });
+                      }
+                    }}
+                  >
+                    {this.state.mode === "translate" ? (
+                      <EditIcon />
+                    ) : (
+                        <DoneIcon />
+                      )}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Remove line">
+                  <IconButton
+                    className=""
+                    onClick={() => {
+                      this.props.removeLine(this.props.index)
+                      this.setState({ delete: true, value: null });
+                    }}
+                  >
+                    <RemoveCircleIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Translate">
+                  <IconButton
+                    className=""
+                    onClick={() => {
+                      if(this.state.value !== ""){
+                        let ok = window.confirm("Your translation is not empty")
+                        if(ok){
+                          this.translate(this.state.original)
+                        }
+                      } else{
+                        this.translate(this.state.original)
+                      }
+                      
+                    }}
+                  >
+                    <TranslateIcon></TranslateIcon>
+                  </IconButton>
+                </Tooltip>
               </div>
             </div>
           </Collapse>
         </Collapse>
+       <Fade in={this.state.loading}>
+         <LinearProgress></LinearProgress>
+       </Fade>
       </div>
     );
   }
