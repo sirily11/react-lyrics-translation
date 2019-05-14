@@ -1,7 +1,7 @@
 {
   "main.css": "/react-lyrics-translation/static/css/main.8c544ed8.chunk.css",
-  "main.js": "/react-lyrics-translation/static/js/main.ad293f0a.chunk.js",
-  "main.js.map": "/react-lyrics-translation/static/js/main.ad293f0a.chunk.js.map",
+  "main.js": "/react-lyrics-translation/static/js/main.d12c0741.chunk.js",
+  "main.js.map": "/react-lyrics-translation/static/js/main.d12c0741.chunk.js.map",
   "static/css/1.a0406e9b.chunk.css": "/react-lyrics-translation/static/css/1.a0406e9b.chunk.css",
   "static/js/1.0ba67762.chunk.js": "/react-lyrics-translation/static/js/1.0ba67762.chunk.js",
   "static/js/1.0ba67762.chunk.js.map": "/react-lyrics-translation/static/js/1.0ba67762.chunk.js.map",
@@ -10,6 +10,6 @@
   "static/css/1.a0406e9b.chunk.css.map": "/react-lyrics-translation/static/css/1.a0406e9b.chunk.css.map",
   "static/css/main.8c544ed8.chunk.css.map": "/react-lyrics-translation/static/css/main.8c544ed8.chunk.css.map",
   "index.html": "/react-lyrics-translation/index.html",
-  "precache-manifest.6b213eea6d7456af5dba5a950602524c.js": "/react-lyrics-translation/precache-manifest.6b213eea6d7456af5dba5a950602524c.js",
+  "precache-manifest.704478be03e9e62f88c6d55f47ad35b0.js": "/react-lyrics-translation/precache-manifest.704478be03e9e62f88c6d55f47ad35b0.js",
   "service-worker.js": "/react-lyrics-translation/service-worker.js"
 }
